@@ -17,7 +17,7 @@ const exporter = new OTLPMetricExporter({
 
 // NOTE: https://github.com/open-telemetry/opentelemetry-js/blob/main/semantic-conventions/README.md#unstable-semconv
 const resource = resourceFromAttributes({
-  [ATTR_SERVICE_NAME]: 'app-service-name',
+  [ATTR_SERVICE_NAME]: 'app-angular-service',
   [ATTR_NETWORK_PEER_ADDRESS]: 'localhost',
   [ATTR_NETWORK_PROTOCOL_NAME]: 'http',
   [ATTR_NETWORK_PROTOCOL_VERSION]: '1.0',
