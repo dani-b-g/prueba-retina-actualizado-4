@@ -19,6 +19,8 @@ export class OtelErrorHandler implements ErrorHandler {
   }
 
   private createErrorSpan(name: string, error: Error, extraAttributes: Record<string, any> = {}) {
+    const parentSpan = trace.getSpan(context.active()); // intenta recuperar span activo
+
     const span = this.tracer.startSpan(name, {
       attributes: {
         'error.message': error.message,
