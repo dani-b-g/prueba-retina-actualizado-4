@@ -1,0 +1,39 @@
+{
+    "id": null,
+    "title": "Enhanced Web Vitals",
+    "panels": [
+        {
+            "title": "LCP Percentiles",
+            "type": "graph",
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(web_vitals_lcp_bucket[1m])) by (le))",
+                    "legendFormat": "LCP p95"
+                },
+                {
+                    "expr": "histogram_quantile(0.90, sum(rate(web_vitals_lcp_bucket[1m])) by (le))",
+                    "legendFormat": "LCP p90"
+                }
+            ]
+        },
+        {
+            "title": "FID Percentiles",
+            "type": "graph",
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(web_vitals_fid_bucket[1m])) by (le))",
+                    "legendFormat": "FID p95"
+                }
+            ]
+        },
+        {
+            "title": "CLS Current Value",
+            "type": "stat",
+            "targets": [
+                {
+                    "expr": "web_vitals_cls"
+                }
+            ]
+        }
+    ]
+}

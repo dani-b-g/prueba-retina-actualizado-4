@@ -1,0 +1,61 @@
+{
+    "id": null,
+    "title": "Angular Metrics Overview",
+    "datasource": {
+      "type": "prometheus",
+      "uid": "Prometheus"
+    },
+    "panels": [
+      {
+        "type": "stat",
+        "title": "LCP (Largest Contentful Paint)",
+        "targets": [
+          {
+            "expr": "web_vitals_lcp",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "FID (First Input Delay)",
+        "targets": [
+          {
+            "expr": "web_vitals_fid",
+            "refId": "B"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "CLS (Cumulative Layout Shift)",
+        "targets": [
+          {
+            "expr": "web_vitals_cls",
+            "refId": "C"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Clicks per Minute",
+        "targets": [
+          {
+            "expr": "rate(user_clicks[1m])",
+            "refId": "D"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Clicks",
+        "targets": [
+          {
+            "expr": "sum(user_clicks)",
+            "refId": "E"
+          }
+        ]
+      }
+    ]
+  }
+  

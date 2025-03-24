@@ -1,0 +1,36 @@
+{
+    "id": null,
+    "title": "Extended Traces Overview",
+    "panels": [
+        {
+            "type": "table",
+            "title": "Top Slow Traces",
+            "targets": [
+                {
+                    "queryType": "traceql",
+                    "query": "duration > 100ms"
+                }
+            ]
+        },
+        {
+            "type": "stat",
+            "title": "Error Spans Count",
+            "targets": [
+                {
+                    "queryType": "traceql",
+                    "query": "status.code = ERROR"
+                }
+            ]
+        },
+        {
+            "type": "graph",
+            "title": "Average Span Duration",
+            "targets": [
+                {
+                    "queryType": "traceql",
+                    "query": "group by service.name | avg(duration)"
+                }
+            ]
+        }
+    ]
+}

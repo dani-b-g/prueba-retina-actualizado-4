@@ -1,0 +1,65 @@
+{
+    "id": null,
+    "title": "Logs Overview",
+    "datasource": {
+      "type": "loki",
+      "uid": "Loki"
+    },
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Log Count by Level",
+        "datasource": {
+          "type": "loki",
+          "uid": "Loki"
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "count_over_time({app=\"angular-frontend\"} |= \"ERROR\" [5m])",
+            "format": "time_series"
+          },
+          {
+            "refId": "B",
+            "expr": "count_over_time({app=\"angular-frontend\"} |= \"WARN\" [5m])",
+            "format": "time_series"
+          },
+          {
+            "refId": "C",
+            "expr": "count_over_time({app=\"angular-frontend\"} |= \"INFO\" [5m])",
+            "format": "time_series"
+          }
+        ]
+      },
+      {
+        "type": "logs",
+        "title": "Recent Logs",
+        "targets": [
+          {
+            "refId": "D",
+            "query": "{app=\"angular-frontend\"}"
+          }
+        ],
+        "options": {
+          "showLabels": true,
+          "showTime": true
+        }
+      },
+      {
+        "type": "graph",
+        "title": "Logs Rate per Second",
+        "datasource": {
+          "type": "loki",
+          "uid": "Loki"
+        },
+        "targets": [
+          {
+            "refId": "E",
+            "expr": "rate({app=\"angular-frontend\"}[1m])",
+            "format": "time_series"
+          }
+        ]
+      }
+    ]
+  }
+  

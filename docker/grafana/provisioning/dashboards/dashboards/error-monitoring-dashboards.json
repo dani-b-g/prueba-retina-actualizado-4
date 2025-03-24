@@ -1,0 +1,26 @@
+{
+    "id": null,
+    "title": "HTTP Traces",
+    "panels": [
+        {
+            "title": "Fetch/XHR Duration",
+            "type": "graph",
+            "targets": [
+                {
+                    "expr": "sum(rate(http_request_duration_seconds_sum[1m]))",
+                    "format": "time_series"
+                }
+            ]
+        },
+        {
+            "title": "HTTP Status Codes",
+            "type": "table",
+            "targets": [
+                {
+                    "expr": "http_request_status_code",
+                    "format": "table"
+                }
+            ]
+        }
+    ]
+}

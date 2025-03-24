@@ -1,0 +1,59 @@
+{
+  "id": null,
+  "uid": null,
+  "title": "Full Observability Overview",
+  "timezone": "browser",
+  "schemaVersion": 37,
+  "version": 1,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "logs",
+      "title": "Recent Logs",
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{service_name=\"app-service-name\"}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "trace",
+      "title": "Recent Traces",
+      "datasource": "Tempo",
+      "targets": [
+        {
+          "expr": "service.name = \"angular-frontend\"",
+          "refId": "B"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Task Duration Avg",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(task_duration_sum[5m]) / rate(task_duration_count[5m])",
+          "refId": "C"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 }
+    },
+    {
+      "type": "piechart",
+      "title": "Log Severity Distribution",
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "count_over_time({service_name=\"app-service-name\"}[1h]) | json | stats count() by (severityNumber)",
+          "refId": "D"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 }
+    }
+  ]
+}
