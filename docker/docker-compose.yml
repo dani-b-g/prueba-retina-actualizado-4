@@ -35,7 +35,9 @@ services:
     image: grafana/tempo:latest
     command: [ "-config.file=/etc/tempo/tempo.yml" ]
     ports:
-      - '3200:3200'
+      - '3200:3200'    # Para queries (server.http_listen_port)
+      - '4320:4318'    # Para ingesta OTLP HTTP
+      # - '4317:4317'  # Para ingesta OTLP gRPC, si lo necesitas
     networks:
       - monitoring
     volumes:
@@ -48,8 +50,9 @@ services:
     volumes:
       - ./otel-collector-config.yml:/etc/otel-collector-config.yml
     ports:
-      - '4317:4317' # OTLP gRPC
       - '4318:4318' # OTLP HTTP
+    depends_on:
+      - tempo
     networks:
       - monitoring
 
