@@ -1,0 +1,70 @@
+@if (pokemon) {
+    <div class="card">
+      <div class="card-header">
+        <img [src]="pokemon.sprites.other['official-artwork'].front_default"
+             [alt]="pokemon.name"
+             class="pokemon-image" />
+        <div>
+          <h2 class="pokemon-name">{{ pokemon.name }}</h2>
+          <p class="pokemon-meta">Base Exp: {{ pokemon.base_experience }}</p>
+          <p class="pokemon-meta">Height: {{ pokemon.height }} | Weight: {{ pokemon.weight }}</p>
+        </div>
+      </div>
+  
+      <div class="section">
+        <h3>Types</h3>
+        <div class="type-badges">
+          @for (t of pokemon.types; track t.type.name) {
+            <span class="type-badge">{{ t.type.name }}</span>
+          }
+        </div>
+      </div>
+  
+      <div class="section">
+        <h3>Abilities</h3>
+        <ul>
+          @for (a of pokemon.abilities; track a.ability.name) {
+            <li>
+              {{ a.ability.name }}
+              @if (a.is_hidden) {
+                <span class="hidden-label">(Hidden)</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+  
+      <div class="section">
+        <h3>Stats</h3>
+        @for (s of pokemon.stats; track s.stat.name) {
+          <div class="stat">
+            <div class="stat-label">
+              <span>{{ s.stat.name }}</span>
+              <span>{{ s.base_stat }}</span>
+            </div>
+            <div class="stat-bar-bg">
+              <div class="stat-bar-fill" [style.width.%]="s.base_stat"></div>
+            </div>
+          </div>
+        }
+      </div>
+  
+      <div class="section">
+        <h3>Main Move</h3>
+        <p>{{ pokemon.moves[0].move.name }}</p>
+      </div>
+  
+      <div class="section">
+        <h3>Audio Cry</h3>
+        <audio controls [src]="pokemon.cries.latest" class="audio"></audio>
+      </div>
+  
+      <div class="section center">
+        <h3>Animated Sprite</h3>
+        <img [src]="pokemon.sprites.other.showdown.front_default"
+             [alt]="pokemon.name + ' animated sprite'"
+             class="sprite-image" />
+      </div>
+    </div>
+  }
+  

@@ -1,0 +1,99 @@
+.card {
+  max-width: 600px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.card-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pokemon-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.pokemon-name {
+  font-size: 24px;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.pokemon-meta {
+  font-size: 14px;
+  color: #666;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
+.type-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.type-badge {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.hidden-label {
+  font-size: 12px;
+  color: #999;
+  margin-left: 5px;
+}
+
+.stat {
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.stat-bar-bg {
+  background-color: #eee;
+  height: 6px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  background-color: #38a169;
+  height: 100%;
+}
+
+.audio {
+  width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.sprite-image {
+  max-height: 100px;
+}

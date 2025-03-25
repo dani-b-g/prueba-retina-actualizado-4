@@ -5,16 +5,27 @@ import { trace, context } from '@opentelemetry/api';
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService {
-
-  logInfo(message: string, attributes: Record<string, any> = {}, associateWithTrace = true) {
+  logInfo(
+    message: string,
+    attributes: Record<string, any> = {},
+    associateWithTrace = true
+  ) {
     this.log(message, SeverityNumber.INFO, attributes, associateWithTrace);
   }
 
-  logWarn(message: string, attributes: Record<string, any> = {}, associateWithTrace = true) {
+  logWarn(
+    message: string,
+    attributes: Record<string, any> = {},
+    associateWithTrace = true
+  ) {
     this.log(message, SeverityNumber.WARN, attributes, associateWithTrace);
   }
 
-  logError(message: string, attributes: Record<string, any> = {}, associateWithTrace = true) {
+  logError(
+    message: string,
+    attributes: Record<string, any> = {},
+    associateWithTrace = true
+  ) {
     this.log(message, SeverityNumber.ERROR, attributes, associateWithTrace);
   }
 
@@ -23,7 +34,10 @@ export class LoggerService {
     const span = trace.getSpan(context.active());
     if (span) {
       const { traceId, spanId } = span.spanContext();
-      console.log(`[traceId: ${traceId}, spanId: ${spanId}] ${message}`, ...optionalParams);
+      console.log(
+        `[traceId: ${traceId}, spanId: ${spanId}] ${message}`,
+        ...optionalParams
+      );
     } else {
       console.log(message, ...optionalParams);
     }
@@ -37,17 +51,23 @@ export class LoggerService {
     associateWithTrace: boolean
   ) {
     let enrichedAttributes = { ...attributes };
+    const span = associateWithTrace
+      ? trace.getSpan(context.active())
+      : undefined;
 
-    if (associateWithTrace) {
-      const span = trace.getSpan(context.active());
-      if (span) {
-        const spanContext = span.spanContext();
-        enrichedAttributes = {
-          ...enrichedAttributes,
-          traceId: spanContext.traceId,
-          spanId: spanContext.spanId,
-        };
-      }
+    if (span) {
+      const spanContext = span.spanContext();
+      enrichedAttributes = {
+        ...enrichedAttributes,
+        traceId: spanContext.traceId,
+        spanId: spanContext.spanId,
+      };
+      // Añadir log como evento al span activo
+      span.addEvent('log', {
+        'log.severity': SeverityNumber[severity],
+        'log.message': message,
+        ...attributes,
+      });
     }
 
     // Emitir a OpenTelemetry Collector

@@ -1,39 +1,59 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
-import { trace, context } from '@opentelemetry/api';
+import { trace, context, SpanStatusCode } from '@opentelemetry/api';
+import { LoggerService } from './logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class OtelErrorHandler implements ErrorHandler {
   private tracer = trace.getTracer('angular-error-handler');
 
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector, private loggerService:LoggerService) {}
 
   handleError(error: any): void {
+    // Maneja errores globales no atrapados
     this.createErrorSpan('Unhandled Error', error);
-    throw error;
   }
 
-  // NUEVO MÉTODO para errores personalizados
-  reportCustomError(name: string, message: string, additionalAttributes: Record<string, any> = {}) {
+  // Método reutilizable para errores personalizados desde cualquier componente o servicio
+  reportCustomError(
+    name: string,
+    message: string,
+    additionalAttributes: Record<string, any> = {}
+  ): void {
     const error = new Error(message);
     this.createErrorSpan(name, error, additionalAttributes);
   }
 
-  private createErrorSpan(name: string, error: Error, extraAttributes: Record<string, any> = {}) {
-    const parentSpan = trace.getSpan(context.active()); // intenta recuperar span activo
+  // Método común para crear un span de error
+  private createErrorSpan(
+    name: string,
+    error: Error,
+    extraAttributes: Record<string, any> = {}
+  ): void {
+    const parentContext = context.active(); // intenta capturar contexto actual
+    const parentSpan = trace.getSpan(parentContext);
 
-    const span = this.tracer.startSpan(name, {
-      attributes: {
-        'error.message': error.message,
-        'error.stack': error.stack || '',
-        ...extraAttributes,
+    const span = this.tracer.startSpan(
+      name,
+      {
+        attributes: {
+          'error.name': error.name || 'UnknownError',
+          'error.message': error.message || 'No message',
+          'error.stack': error.stack || 'No stack trace',
+          ...extraAttributes,
+        },
       },
-    });
-
+      parentContext // vincula al span activo si existe
+    );
+    
+    this.loggerService.logError('Error capturado en ErrorHandler', { error: error.message||'undefined'});
     span.recordException(error);
-    span.setStatus({ code: 2, message: error.message });
+    span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
     span.end();
 
     const spanContext = span.spanContext();
-    console.error(`[Custom Error] traceId=${spanContext.traceId} spanId=${spanContext.spanId}`, error);
+    console.error(
+      `[Error] traceId=${spanContext.traceId} spanId=${spanContext.spanId}`,
+      error
+    );
   }
 }
