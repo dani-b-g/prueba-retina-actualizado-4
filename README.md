@@ -93,13 +93,3 @@ Logs y métricas pueden ser enviados desde el backend o con wrappers personaliza
 
 ---
 
-## 📅 Próximos pasos sugeridos
-
-- Agregar Filebeat para enviar logs desde archivos a Elasticsearch.
-- Añadir Elastic APM Server para trazas frontend.
-- Crear dashboards personalizados en Kibana.
-
----
-
-Cualquier duda o extensión adicional (como alertas, APM, beats o Web Vitals), ¡no dudes en preguntar!
-
