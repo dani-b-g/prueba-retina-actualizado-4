@@ -1,27 +1,103 @@
-# PruebaRetinaActualizado4
+# ✨ Observabilidad con Grafana, Prometheus, Loki, Tempo y Elasticsearch + Kibana
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.13.
+Este entorno Docker te permite tener un stack completo de observabilidad para aplicaciones frontend (como Angular), con trazas, logs, métricas y opcionalmente Elasticsearch/Kibana como visor adicional.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🤖 Servicios Incluidos
 
-## Code scaffolding
+| Servicio         | Puerto | Descripción                                                                 |
+|------------------|--------|-----------------------------------------------------------------------------|
+| Grafana          | `3000` | Visualización de métricas, logs y trazas. Datasources: Prometheus, Loki, Tempo. |
+| Prometheus       | `9090` | Recolección de métricas desde el OTEL Collector.                            |
+| Loki             | `3100` | Recolección de logs desde OTEL Collector (OTLP).                            |
+| Tempo            | `3200` | Recolección y almacenamiento de trazas desde OTEL Collector.                |
+| OTEL Collector   | `4318` | Punto de ingesta OTLP (HTTP) para logs, métricas y trazas.                   |
+| Elasticsearch    | `9200` | Almacenamiento de datos estructurados (opcional).                            |
+| Kibana           | `5601` | Exploración de datos en Elasticsearch (opcional).                            |
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 🚀 Iniciar el entorno en local
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+# Clonar el proyecto (si aplica)
+git clone <repo-url>
+cd <directorio>
 
-## Running unit tests
+# Iniciar los contenedores
+docker-compose down
+docker-compose up -d
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Verifica en el navegador:
 
-## Running end-to-end tests
+- Grafana: [http://localhost:3000](http://localhost:3000)
+- Prometheus: [http://localhost:9090](http://localhost:9090)
+- Tempo: [http://localhost:3200](http://localhost:3200)
+- Loki: [http://localhost:3100](http://localhost:3100)
+- Elasticsearch: [http://localhost:9200](http://localhost:9200)
+- Kibana: [http://localhost:5601](http://localhost:5601)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## 🌍 Flujo de datos (Mermaid)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+graph TD
+  A[App Angular] -->|OTLP HTTP (4318)| B(OpenTelemetry Collector)
+
+  subgraph Collector Pipelines
+    B --> C1[Exporta Métricas ➔ Prometheus]
+    B --> C2[Exporta Logs ➔ Loki]
+    B --> C3[Exporta Trazas ➔ Tempo]
+  end
+
+  C1 --> D[Grafana]
+  C2 --> D
+  C3 --> D
+
+  subgraph Opcional
+    B --> E[Elasticsearch]
+    E --> F[Kibana]
+  end
+
+---
+
+## 📃 Archivos importantes
+
+- `docker-compose.yml`: define todos los servicios.
+- `otel-collector-config.yml`: configura los pipelines del OTEL Collector.
+- `prometheus.yml`: configuración de scrape para Prometheus.
+- `tempo.yml`, `loki.yml`, `dashboards.yml`: provisioning para Grafana.
+
+---
+
+## 🔧 Enviar datos desde Angular
+
+En tu app Angular puedes usar `@opentelemetry/sdk-trace-web` y `@opentelemetry/exporter-trace-otlp-http` para enviar trazas. Asegúrate de apuntar al endpoint:
+
+```
+http://localhost:4318/v1/traces
+```
+
+Logs y métricas pueden ser enviados desde el backend o con wrappers personalizados.
+
+---
+
+## 🔐 Accesos por defecto
+
+- **Grafana**: `admin` / `admin`
+- **Kibana**: No requiere login (seguridad desactivada)
+
+---
+
+## 📅 Próximos pasos sugeridos
+
+- Agregar Filebeat para enviar logs desde archivos a Elasticsearch.
+- Añadir Elastic APM Server para trazas frontend.
+- Crear dashboards personalizados en Kibana.
+
+---
+
+Cualquier duda o extensión adicional (como alertas, APM, beats o Web Vitals), ¡no dudes en preguntar!
+
