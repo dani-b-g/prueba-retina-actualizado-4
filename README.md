@@ -45,7 +45,7 @@ Verifica en el navegador:
 
 ```mermaid
 graph TD
-  A[App Angular] -->|OTLP HTTP (4318)| B(OpenTelemetry Collector)
+  A[App Angular] -->|OTLP HTTP 4318| BOpenTelemetry Collector
 
   subgraph Collector Pipelines
     B --> C1[Exporta Métricas ➔ Prometheus]
