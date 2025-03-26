@@ -43,6 +43,7 @@ Verifica en el navegador:
 
 ## 🌍 Flujo de datos (Mermaid)
 
+```mermaid
 graph TD
   A[App Angular] -->|OTLP HTTP (4318)| B(OpenTelemetry Collector)
 
@@ -60,6 +61,7 @@ graph TD
     B --> E[Elasticsearch]
     E --> F[Kibana]
   end
+```
 
 ---
 
