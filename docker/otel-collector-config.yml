@@ -29,6 +29,10 @@ exporters:
     endpoint: "http://tempo:4318"
     tls:
       insecure: true
+  elasticsearch:
+    endpoint: http://elasticsearch:9200
+    tls:
+      insecure: true
 
 service:
   pipelines:
@@ -39,8 +43,8 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlphttp/loki, debug]
+      exporters: [otlphttp/loki, debug, elasticsearch]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlphttp/tempo, debug]
+      exporters: [otlphttp/tempo, debug, elasticsearch]
