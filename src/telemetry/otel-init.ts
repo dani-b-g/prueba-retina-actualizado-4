@@ -13,6 +13,9 @@ import {
   ATTR_NETWORK_PROTOCOL_NAME,
   ATTR_NETWORK_PROTOCOL_VERSION,
 } from '@opentelemetry/semantic-conventions';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
+import { PeriodicExportingMetricReader, MeterProvider } from '@opentelemetry/sdk-metrics';
+import { onCLS, onLCP, onINP } from 'web-vitals';
 
 const resource = resourceFromAttributes({
   [ATTR_SERVICE_NAME]: 'app-angular-service',
@@ -25,14 +28,48 @@ const resource = resourceFromAttributes({
 const exporter = new OTLPTraceExporter({
   url: 'http://localhost:4318/v1/traces',
 });
+// ==== METRICS PROVIDER ====
+
+const metricExporter = new OTLPMetricExporter({
+  url: 'http://localhost:4318/v1/metrics',
+});
+
+const metricReader = new PeriodicExportingMetricReader({
+  exporter: metricExporter,
+  exportIntervalMillis: 5000,
+});
+
+const meterProvider = new MeterProvider({
+  resource: resource,
+  readers: [metricReader],
+});
+
 
 // Crea el proveedor de trazas y añade el procesador de spans
 const traceProvider = new WebTracerProvider({
   resource,
   spanProcessors: [new BatchSpanProcessor(exporter)],
 });
-
 traceProvider.register({ contextManager: new ZoneContextManager() });
+
+// WEB-VITALS
+const webVitalMeter = meterProvider.getMeter('web-vitals');
+
+function sendWebVital(name: string, value: number) {
+  const gauge = webVitalMeter.createObservableGauge(name, {
+    description: `Web Vital ${name}`,
+  });
+
+  gauge.addCallback((observableResult) => {
+    observableResult.observe(value);
+  });
+}
+
+onCLS((metric) => sendWebVital('cls', metric.value));
+onLCP((metric) => sendWebVital('lcp', metric.value));
+onINP((metric) => sendWebVital('inp', metric.value));
+
+
 
 // Registra las instrumentaciones automáticas
 registerInstrumentations({
@@ -40,6 +77,6 @@ registerInstrumentations({
     new FetchInstrumentation(),
     new XMLHttpRequestInstrumentation(),
     new UserInteractionInstrumentation(),
-  ],
+  ],meterProvider:meterProvider,
+  tracerProvider:traceProvider
 });
-
