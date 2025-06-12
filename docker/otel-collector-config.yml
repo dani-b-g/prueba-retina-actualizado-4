@@ -3,6 +3,8 @@ receivers:
     protocols:
       http:
         endpoint: "0.0.0.0:4318"
+        auth:
+          authenticator: oidc
         cors:
           allowed_origins:
             - "http://localhost:4200"
@@ -34,7 +36,13 @@ exporters:
     tls:
       insecure: true
 
+extensions:
+  oidc:
+    issuer_url: http://<auth-server>/realms/<realm>
+    audience: otel-collector
+
 service:
+  extensions: [oidc]
   pipelines:
     metrics:
       receivers: [otlp]
