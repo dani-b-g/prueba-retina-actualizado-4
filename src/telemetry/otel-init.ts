@@ -24,14 +24,18 @@ const resource = resourceFromAttributes({
   [ATTR_NETWORK_PROTOCOL_VERSION]: '1.0',
   app: 'angular-frontend',
 });
+// Token obtenido tras el flujo de login (guardado en localStorage)
+const token = localStorage.getItem('auth_token');
 // Configura el exportador OTLP con la URL de tu backend de trazas
 const exporter = new OTLPTraceExporter({
   url: 'http://localhost:4318/v1/traces',
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 // ==== METRICS PROVIDER ====
 
 const metricExporter = new OTLPMetricExporter({
   url: 'http://localhost:4318/v1/metrics',
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
 const metricReader = new PeriodicExportingMetricReader({
