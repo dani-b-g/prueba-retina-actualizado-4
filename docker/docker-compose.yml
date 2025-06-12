@@ -1,6 +1,6 @@
 services:
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.2.3
     ports:
       - '3000:3000'
     volumes:
@@ -16,7 +16,7 @@ services:
       - monitoring
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.48.1
     ports:
       - '9090:9090'
     volumes:
@@ -25,14 +25,14 @@ services:
       - monitoring
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:2.9.1
     ports:
       - '3100:3100'
     networks:
       - monitoring
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:2.4.1
     command: [ "-config.file=/etc/tempo/tempo.yml" ]
     ports:
       - '3200:3200'    # Para queries (server.http_listen_port)
@@ -45,7 +45,7 @@ services:
       - tempo-storage:/var/tempo/traces
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.95.0
     command: ["--config=/etc/otel-collector-config.yml"]
     volumes:
       - ./otel-collector-config.yml:/etc/otel-collector-config.yml
