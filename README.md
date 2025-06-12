@@ -84,6 +84,10 @@ http://localhost:4318/v1/traces
 
 Logs y métricas pueden ser enviados desde el backend o con wrappers personalizados.
 
+Al iniciar sesión en la aplicación se obtiene un token (por ejemplo un JWT) que
+se almacena en `localStorage` bajo la clave `auth_token`. Dicho token se usa
+posteriormente para firmar las peticiones de los exportadores OTLP.
+
 ---
 
 ## 🔐 Accesos por defecto
