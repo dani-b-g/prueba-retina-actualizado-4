@@ -93,3 +93,17 @@ Logs y métricas pueden ser enviados desde el backend o con wrappers personaliza
 
 ---
 
+## 🔑 Variables de entorno para OIDC
+
+Para habilitar la autenticación OIDC en el OTEL Collector se deben definir las
+siguientes variables antes de levantar los contenedores:
+
+- `OIDC_ISSUER_URL`: URL del servidor de identidad (por ejemplo
+  `http://<auth-server>/realms/<realm>`).
+- `OIDC_AUDIENCE`: Audiencia esperada para el collector, normalmente
+  `otel-collector`.
+
+Estas variables son usadas por el autenticador `oidc` configurado en
+`docker/otel-collector-config.yml`.
+
+
