@@ -1,6 +1,6 @@
 # ✨ Observabilidad con Grafana, Prometheus, Loki, Tempo y Elasticsearch + Kibana
 
-Este entorno Docker te permite tener un stack completo de observabilidad para aplicaciones frontend (como Angular), con trazas, logs, métricas y opcionalmente Elasticsearch/Kibana como visor adicional.
+Este entorno **Podman** te permite tener un stack completo de observabilidad para aplicaciones frontend (como Angular), con trazas, logs, métricas y opcionalmente Elasticsearch/Kibana como visor adicional. Se usa `podman-compose` para orquestar los contenedores.
 
 ---
 
@@ -26,8 +26,8 @@ git clone <repo-url>
 cd <directorio>
 
 # Iniciar los contenedores
-docker-compose down
-docker-compose up -d
+podman-compose down
+podman-compose up -d
 ```
 
 Verifica en el navegador:
@@ -67,7 +67,7 @@ graph TD
 
 ## 📃 Archivos importantes
 
-- `docker-compose.yml`: define todos los servicios.
+ - `podman-compose.yml`: define todos los servicios.
 - `otel-collector-config.yml`: configura los pipelines del OTEL Collector.
 - `prometheus.yml`: configuración de scrape para Prometheus.
 - `tempo.yml`, `loki.yml`, `dashboards.yml`: provisioning para Grafana.
@@ -108,6 +108,6 @@ siguientes variables antes de levantar los contenedores:
   `otel-collector`.
 
 Estas variables son usadas por el autenticador `oidc` configurado en
-`docker/otel-collector-config.yml`.
+`podman/otel-collector-config.yml`.
 
 
